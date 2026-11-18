@@ -1,0 +1,11 @@
+data/
+.env
+.env.*
+!.env.example
+build/
+build-*/
+database-backups/
+airline_reservation
+airline_reservation.exe
+airline_reservation_server.exe
+airline_reservation_server_linux

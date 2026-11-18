@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061d3a">
+  <meta name="description" content="Discover flights and manage your journey with Skyward Airways.">
+  <title>Skyward Airways | Airline Reservation System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" data-view="home" aria-label="Skyward Airways home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 42 42" role="img"><path d="M7 25.5 35 9l-10 23-5-8-13 1.5Z"/><path d="m20 24 6 8 3-13"/></svg>
+      </span>
+      <span><strong>SKYWARD</strong><small> AIRWAYS</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <a href="#home" data-view="home" class="nav-link active">Home</a>
+      <a href="#destinations" data-view="destinations" class="nav-link">Destinations</a>
+      <button type="button" class="nav-link" data-view="dashboard">My trips</button>
+      <button type="button" class="nav-link admin-nav" data-view="admin" hidden>Admin</button>
+    </nav>
+    <div class="nav-actions">
+      <span class="user-greeting" id="userGreeting" hidden></span>
+      <button class="button button-quiet" id="navLogin" type="button" data-view="auth">Sign in</button>
+      <button class="button button-primary button-small" id="navRegister" type="button" data-auth-tab="register">Create account</button>
+      <button class="button button-quiet" id="navLogout" type="button" hidden>Sign out</button>
+      <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-view active" id="homeView" data-page="home">
+      <section class="hero">
+        <div class="hero-noise"></div>
+        <div class="hero-copy">
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-dot"></span> A better way to fly</div>
+          <h1>Find your next<br><em>somewhere.</em></h1>
+          <p>Thoughtful journeys, effortless booking, and a little more sky in every day.</p>
+          <a class="text-link text-link-light" href="#destinations" data-view="destinations">Explore destinations <span>↗</span></a>
+        </div>
+        <div class="hero-art">
+          <img src="/assets/skyward-hero.jpg" alt="Airliner above the clouds at golden hour">
+          <div class="hero-stamp"><span>✦</span><strong>Go beyond<br>the ordinary</strong></div>
+        </div>
+        <div class="hero-search-wrap">
+          <form class="search-panel" id="searchForm">
+            <div class="search-field">
+              <label for="sourceInput">From</label>
+              <div class="field-with-icon"><span class="field-icon">⌖</span><input id="sourceInput" name="source" placeholder="Departure city" autocomplete="address-level2" required></div>
+            </div>
+            <button type="button" class="swap-button" id="swapCities" aria-label="Swap departure and destination">⇄</button>
+            <div class="search-field">
+              <label for="destinationInput">To</label>
+              <div class="field-with-icon"><span class="field-icon">⌖</span><input id="destinationInput" name="destination" placeholder="Arrival city" autocomplete="address-level2" required></div>
+            </div>
+            <div class="search-field">
+              <label for="dateInput">Departure</label>
+              <div class="field-with-icon"><span class="field-icon">▦</span><input id="dateInput" name="date" type="date" value="2026-12-15" required></div>
+            </div>
+            <div class="search-field search-field-passengers">
+              <label for="passengerCountInput">Passengers</label>
+              <div class="field-with-icon"><span class="field-icon">♙</span>
+                <select id="passengerCountInput" name="passengers" aria-label="Passengers">
+                  <option value="1">1 passenger</option><option value="2">2 passengers</option>
+                  <option value="3">3 passengers</option><option value="4">4 passengers</option>
+                  <option value="5">5 passengers</option><option value="6">6 passengers</option>
+                  <option value="7">7 passengers</option><option value="8">8 passengers</option>
+                  <option value="9">9 passengers</option>
+                </select>
+              </div>
+            </div>
+            <button class="button button-primary search-submit" type="submit"><span>Search flights</span><b>→</b></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="section-shell section-featured">
+        <div class="section-heading">
+          <div><div class="eyebrow">Take the scenic route</div><h2>Popular right now</h2></div>
+          <button type="button" class="text-link" data-view="destinations">See all journeys <span>→</span></button>
+        </div>
+        <div class="flight-grid" id="featuredFlights">
+          <div class="loading-card"><span class="loader"></span><span>Finding your next flight…</span></div>
+        </div>
+      </section>
+
+      <section class="destination-section" id="destinations">
+        <div class="section-shell">
+          <div class="section-heading section-heading-light">
+            <div><div class="eyebrow eyebrow-light">Make a little room for wonder</div><h2>Where will you go?</h2></div>
+            <p>Four cities. Countless ways to see them.</p>
+          </div>
+          <div class="destination-grid">
+            <button class="destination-card destination-delhi" data-destination-source="Delhi" data-destination="Mumbai">
+              <span class="destination-index">01 / INDIA</span><span class="destination-copy"><strong>Mumbai</strong><small>City of many moods</small></span><span class="destination-arrow">↗</span>
+            </button>
+            <button class="destination-card destination-bengaluru" data-destination-source="Delhi" data-destination="Bengaluru">
+              <span class="destination-index">02 / INDIA</span><span class="destination-copy"><strong>Bengaluru</strong><small>Find your own rhythm</small></span><span class="destination-arrow">↗</span>
+            </button>
+            <button class="destination-card destination-chennai" data-destination-source="Chennai" data-destination="Delhi">
+              <span class="destination-index">03 / INDIA</span><span class="destination-copy"><strong>New Delhi</strong><small>Where stories meet</small></span><span class="destination-arrow">↗</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="section-shell promise-strip">
+        <div><span class="promise-icon">✦</span><strong>Made for the journey</strong><span>Clear fares, easy plans, no surprises.</span></div>
+        <div><span class="promise-icon">⌁</span><strong>Your trip, your way</strong><span>Manage every booking in one place.</span></div>
+        <div><span class="promise-icon">↗</span><strong>More time for wonder</strong><span>Get there with a little more ease.</span></div>
+      </section>
+    </section>
+
+    <section class="page-view content-page" id="resultsView" data-page="results" hidden>
+      <div class="page-top">
+        <button class="back-link" type="button" data-view="home">← Back to search</button>
+        <div class="eyebrow">Your journey, just ahead</div><h1 id="resultsTitle">Available flights</h1>
+        <p id="resultsSubtitle" class="muted"></p>
+      </div>
+      <div class="results-toolbar"><span id="resultsCount" role="status" aria-live="polite">0 flights found</span><label class="sort-control">Sort by
+        <select id="flightSort"><option value="recommended">Recommended</option><option value="fare">Lowest fare</option><option value="departure">Departure time</option><option value="arrival">Arrival time</option><option value="airline">Airline name</option></select>
+      </label><button class="button button-outline" type="button" data-view="home">Edit search</button></div>
+      <section class="results-filters panel" aria-label="Filter available flights">
+        <label>Airline
+          <select id="airlineFilter"><option value="">All airlines</option></select>
+        </label>
+        <label>Cabin availability
+          <select id="cabinFilter"><option value="any">Any available cabin</option><option value="E">Economy</option><option value="B">Business</option></select>
+        </label>
+        <label>Departure time
+          <select id="departureWindowFilter"><option value="any">Any time</option><option value="early">00:00–05:59</option><option value="morning">06:00–11:59</option><option value="afternoon">12:00–17:59</option><option value="evening">18:00–23:59</option></select>
+        </label>
+        <label>Minimum fare per traveller (₹)
+          <input id="minimumFareFilter" type="number" min="0" step="100" inputmode="numeric" placeholder="No minimum">
+        </label>
+        <label>Maximum fare per traveller (₹)
+          <input id="maximumFareFilter" type="number" min="0" step="100" inputmode="numeric" placeholder="No maximum">
+        </label>
+        <button class="button button-outline filter-reset" id="resetFlightFilters" type="button">Clear filters</button>
+      </section>
+      <section class="fare-calendar panel" id="fareCalendar" hidden aria-label="Lowest available fare by date"></section>
+      <div class="flight-grid flight-grid-results" id="searchResults"></div>
+      <div class="empty-state" id="noResults" hidden><span>✦</span><h2>No flights on this route yet</h2><p>Try a different city or date. New journeys are added by our flight team.</p></div>
+    </section>
+
+    <section class="page-view auth-page" id="authView" data-page="auth" hidden>
+      <div class="auth-art">
+        <div class="eyebrow eyebrow-light">Welcome aboard</div><h1>Your next trip<br>starts here.</h1>
+        <p>Sign in to keep all your journeys together, from first search to final landing.</p>
+        <div class="auth-art-note"><span>✦</span> Thoughtful travel. One account.</div>
+      </div>
+      <div class="auth-content">
+        <div class="auth-heading"><div class="eyebrow">Member access</div><h2 id="authTitle">Good to have you back.</h2><p id="authDescription">Sign in to see your upcoming journeys.</p></div>
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab active" data-auth-tab="login">Passenger sign in</button>
+          <button type="button" class="auth-tab" data-auth-tab="register">Create account</button>
+          <button type="button" class="auth-tab" data-auth-tab="admin">Admin</button>
+        </div>
+        <form id="loginForm" class="form-stack">
+          <label>Passenger ID<input name="id" autocomplete="username" placeholder="e.g. P1001" required></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="Your password" required></label>
+          <button class="button button-primary button-wide" type="submit">Sign in <span>→</span></button>
+        </form>
+        <form id="registerForm" class="form-stack" hidden>
+          <label>Passenger ID<input name="id" autocomplete="username" placeholder="Choose a unique ID" required minlength="2" maxlength="40"></label>
+          <label>Full name<input name="name" autocomplete="name" placeholder="Your name" required maxlength="100"></label>
+          <label>Email or phone<input name="contact" autocomplete="email" placeholder="How can we reach you?" required maxlength="120"></label>
+          <label>Password<input name="password" type="password" autocomplete="new-password" placeholder="At least 12 characters" required minlength="12" maxlength="200"></label>
+          <button class="button button-primary button-wide" type="submit">Create passenger account <span>→</span></button>
+        </form>
+        <form id="adminLoginForm" class="form-stack" hidden>
+          <label>Administrator username<input name="username" autocomplete="username" placeholder="Admin username" required></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="Administrator password" required></label>
+          <button class="button button-primary button-wide" type="submit">Open admin dashboard <span>→</span></button>
+        </form>
+        <p class="auth-footnote">Your details stay with your local project server.</p>
+      </div>
+    </section>
+
+    <section class="page-view content-page" id="bookingView" data-page="booking" hidden>
+      <div class="page-top compact-top"><button class="back-link" type="button" data-view="results">← Back to flights</button><div class="eyebrow">Almost there</div><h1>Complete your booking</h1><p class="muted">Review your flight and confirm the travellers on this reservation.</p></div>
+      <div class="booking-layout">
+        <div class="panel booking-main">
+          <div class="panel-heading"><div><div class="eyebrow">Passenger details</div><h2>Your reservation</h2></div><span class="secure-mark">DEMO RESERVATION</span></div>
+          <div id="bookingPassenger" class="profile-summary"></div>
+          <form id="bookingForm" class="form-stack">
+            <fieldset class="class-picker"><legend>Choose your travel class</legend>
+              <label class="class-option"><input type="radio" name="travelClass" value="E" checked><span><b>Economy</b><small>Comfort for every mile</small></span><strong id="economyPrice">—</strong></label>
+              <label class="class-option"><input type="radio" name="travelClass" value="B"><span><b>Business</b><small>Room to arrive refreshed</small></span><strong id="businessPrice">—</strong></label>
+            </fieldset>
+            <label>Passengers
+              <select id="bookingPassengerCount" name="passengerCount"></select>
+              <small class="field-help">Seats are checked again at confirmation to prevent overbooking.</small>
+            </label>
+            <section class="seat-section" aria-labelledby="seatHeading">
+              <div class="seat-section-heading"><div><div class="eyebrow">Choose your place</div><h3 id="seatHeading">Select seats</h3></div><span id="seatSelectionCount" class="count-pill">0 selected</span></div>
+              <div class="seat-legend"><span><i class="seat-key available"></i> Available</span><span><i class="seat-key selected"></i> Selected</span><span><i class="seat-key occupied"></i> Occupied</span><span>Exit-row seats include a surcharge</span></div>
+              <div class="seat-map" id="seatMap" aria-live="polite"></div>
+            </section>
+            <fieldset class="addon-picker"><legend>Make it yours</legend>
+              <label><input type="checkbox" name="addOns" value="extra-bag"><span><b>Extra checked bag</b><small>Additional 15 kg allowance</small></span><strong>₹1,500 / traveller</strong></label>
+              <label><input type="checkbox" name="addOns" value="priority"><span><b>Priority boarding</b><small>Be among the first to board</small></span><strong>₹750 / traveller</strong></label>
+              <label><input type="checkbox" name="addOns" value="lounge"><span><b>Airport lounge</b><small>Relax before departure</small></span><strong>₹2,500 / traveller</strong></label>
+              <label><input type="checkbox" name="addOns" value="meal"><span><b>Curated meal</b><small>Fresh meal for the journey</small></span><strong>₹550 / traveller</strong></label>
+              <label><input type="checkbox" name="addOns" value="insurance"><span><b>Trip protection</b><small>Simple cover for this trip</small></span><strong>₹900 / traveller</strong></label>
+            </fieldset>
+            <div class="promo-row">
+              <label for="promoCode">Promotional code<input id="promoCode" name="promoCode" maxlength="24" placeholder="Enter code"></label>
+              <button type="button" class="button button-outline" id="applyPromo">Apply</button>
+              <span id="promoFeedback" aria-live="polite"></span>
+            </div>
+            <div class="fare-breakdown" id="bookingFareBreakdown" aria-live="polite"></div>
+            <div class="fare-total"><span>Total fare</span><strong id="bookingTotal">—</strong></div>
+            <p class="demo-payment-note">Demonstration only: no payment is collected, no add-on service is provided, and no payment provider is contacted. Fares, cancellations, and refunds are simulations.</p>
+            <button class="button button-primary button-wide" type="submit">Confirm demo booking <span>→</span></button>
+          </form>
+        </div>
+        <aside class="panel flight-summary-panel"><div class="eyebrow">Flight summary</div><div id="bookingFlightSummary"></div></aside>
+      </div>
+    </section>
+
+    <section class="page-view content-page" id="dashboardView" data-page="dashboard" hidden>
+      <div class="page-top"><div class="eyebrow">All your journeys, together</div><h1>Your travel desk</h1><p class="muted">Your profile and every trip in one place.</p></div>
+      <div class="dashboard-profile panel" id="profilePanel"></div>
+      <div class="section-heading dashboard-heading"><div><div class="eyebrow">Your reservations</div><h2>Booking history</h2></div><button class="button button-primary button-small" type="button" data-view="home">Find a flight</button></div>
+      <div class="booking-list" id="passengerBookings"></div>
+      <div class="empty-state" id="noBookings" hidden><span>✦</span><h2>Your next story is waiting</h2><p>Search available flights and make your first reservation.</p><button class="button button-primary" type="button" data-view="home">Search flights</button></div>
+    </section>
+
+    <section class="page-view content-page admin-page" id="adminView" data-page="admin" hidden>
+      <div class="page-top"><div class="eyebrow">Operations overview</div><h1>Admin dashboard</h1><p class="muted">Manage the schedule and keep an eye on every reservation.</p></div>
+      <div class="stats-grid" id="adminStats">
+        <div class="stat-card"><span>Flights</span><strong>—</strong></div><div class="stat-card"><span>Passengers</span><strong>—</strong></div>
+        <div class="stat-card"><span>Active bookings</span><strong>—</strong></div><div class="stat-card"><span>Active booking value · demo</span><strong>—</strong></div>
+      </div>
+      <section class="report-strip panel" aria-label="Booking and occupancy overview">
+        <div><div class="eyebrow">Seat occupancy</div><div class="report-track"><span id="occupancyBar"></span></div><small id="occupancyCaption"></small></div>
+        <div><div class="eyebrow">Reservations</div><strong id="reservationCaption">—</strong><small>Active and cancelled bookings</small></div>
+        <div><div class="eyebrow">Active booking value · demo</div><strong id="revenueCaption">—</strong><small>Simulated fares only; no payments collected</small></div>
+      </section>
+      <div class="admin-columns">
+        <section class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">Schedule</div><h2>Manage flights</h2></div><button class="button button-primary button-small" type="button" id="newFlightButton">+ Add flight</button></div>
+          <form id="flightForm" class="flight-form" hidden>
+            <div class="form-grid">
+              <label>Flight number<input name="number" required maxlength="20" placeholder="e.g. AI205"></label>
+              <label>Airline<input name="airline" required maxlength="80" placeholder="Airline name"></label>
+              <label>From<input name="source" required placeholder="Source city"></label>
+              <label>To<input name="destination" required placeholder="Destination city"></label>
+              <label>Date<input name="date" type="date" required></label>
+              <label>Departure<input name="departureTime" type="time" required></label>
+              <label>Arrival<input name="arrivalTime" type="time" required></label>
+              <label>Economy base fare<input name="baseFare" type="number" min="0.01" step="0.01" required></label>
+              <label>Economy seats<input name="economySeats" type="number" min="0" step="1" required></label>
+              <label>Business seats<input name="businessSeats" type="number" min="0" step="1" required></label>
+            </div>
+            <div class="form-actions"><button type="button" class="button button-outline" id="cancelFlightEdit">Cancel</button><button type="submit" class="button button-primary" id="saveFlightButton">Save flight</button></div>
+          </form>
+          <div class="table-wrap"><table><thead><tr><th>Flight</th><th>Route</th><th>Date / time</th><th>Seats</th><th>Actions</th></tr></thead><tbody id="adminFlights"></tbody></table></div>
+        </section>
+      </div>
+      <div class="admin-columns admin-lower">
+        <section class="panel"><div class="panel-heading"><div><div class="eyebrow">People</div><h2>Passengers</h2></div><span id="passengerTotal" class="count-pill">0</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Passenger ID</th><th>Contact</th><th>Rewards</th></tr></thead><tbody id="adminPassengers"></tbody></table></div></section>
+        <section class="panel"><div class="panel-heading"><div><div class="eyebrow">Reservations</div><h2>All bookings</h2></div><span id="bookingTotal" class="count-pill">0</span></div><div class="table-wrap"><table><thead><tr><th>PNR</th><th>Passenger</th><th>Flight</th><th>Seats / add-ons</th><th>Demo fare / status</th></tr></thead><tbody id="adminBookings"></tbody></table></div></section>
+      </div>
+    </section>
+
+    <section class="page-view content-page ticket-page" id="ticketView" data-page="ticket" hidden>
+      <div class="ticket-toolbar"><button class="back-link" type="button" data-view="dashboard">← Back to my trips</button><button class="button button-outline" type="button" id="printTicket">Print ticket</button></div>
+      <div id="ticketContent"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <a class="brand brand-footer" href="#home" data-view="home"><span class="brand-mark"><svg viewBox="0 0 42 42"><path d="M7 25.5 35 9l-10 23-5-8-13 1.5Z"/><path d="m20 24 6 8 3-13"/></svg></span><span><strong>SKYWARD</strong><small> AIRWAYS</small></span></a>
+      <p>Go beyond the ordinary.<br>We'll take care of the way there.</p>
+      <div class="footer-links"><a href="#home" data-view="home">Home</a><a href="#destinations" data-view="destinations">Destinations</a><button type="button" data-view="auth">Passenger sign in</button></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Skyward Airways</span><span>Designed for your next departure ✦</span></div>
+  </footer>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

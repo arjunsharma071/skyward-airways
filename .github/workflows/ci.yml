@@ -1,0 +1,92 @@
+name: C++ and container CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-bookworm
+        env:
+          POSTGRES_DB: skyward_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-only-test-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d skyward_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libpq-dev libssl-dev
+      - name: Configure PostgreSQL-enabled backend and tests
+        run: >-
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DSKYWARD_WITH_POSTGRES=ON
+          -DSKYWARD_BUILD_TESTS=ON
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Run file and PostgreSQL integration tests
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:ci-only-test-password@127.0.0.1:5432/skyward_test
+        run: ctest --test-dir build --output-on-failure
+
+  container-api-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install smoke-test tools
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Configure isolated test deployment
+        run: |
+          printf '%s\n' \
+            'APP_ENV=production' \
+            'HTTP_PORT=18080' \
+            'ADMIN_USERNAME=ci-admin' \
+            'ADMIN_PASSWORD=ci-only-admin-password' \
+            'POSTGRES_DB=skyward_ci' \
+            'POSTGRES_USER=skyward_ci' \
+            'POSTGRES_PASSWORD=ci-only-database-password' \
+            'LEGACY_DATA_PATH=./tests/fixtures/data' > .env
+      - name: Build and start Compose deployment
+        run: |
+          docker compose build --pull
+          docker compose up -d
+      - name: Exercise frontend and REST API through containers
+        env:
+          BASE_URL: http://127.0.0.1:18080
+          CI_ADMIN_USERNAME: ci-admin
+          CI_ADMIN_PASSWORD: ci-only-admin-password
+        run: bash tests/api_smoke.sh
+      - name: Show container diagnostics on failure
+        if: failure()
+        run: docker compose ps && docker compose logs --no-color
+      - name: Stop Compose test deployment
+        if: always()
+        run: docker compose down --volumes --remove-orphans
+
+  multi-architecture-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Build AMD64 and ARM64 images
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: false
